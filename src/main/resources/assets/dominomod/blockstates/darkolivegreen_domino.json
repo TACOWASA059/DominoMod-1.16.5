@@ -1,0 +1,116 @@
+{
+    "variants": {
+      "falling=false,rotation=8": {
+        "model": "dominomod:block/darkolivegreen_domino_8"
+      },
+      "falling=true,rotation=8": {
+        "model": "dominomod:block/darkolivegreen_domino_8_dropped"
+      },
+      "falling=false,rotation=7": {
+        "model": "dominomod:block/darkolivegreen_domino_7"
+      },
+      "falling=true,rotation=7": {
+        "model": "dominomod:block/darkolivegreen_domino_7_dropped"
+      },
+      "falling=false,rotation=6": {
+        "model": "dominomod:block/darkolivegreen_domino_6"
+      },
+      "falling=true,rotation=6": {
+        "model": "dominomod:block/darkolivegreen_domino_6_dropped"
+      },
+      "falling=false,rotation=5": {
+        "model": "dominomod:block/darkolivegreen_domino_5"
+      },
+      "falling=true,rotation=5": {
+        "model": "dominomod:block/darkolivegreen_domino_5_dropped"
+      },
+      "falling=false,rotation=4": {
+        "model": "dominomod:block/darkolivegreen_domino_4"
+      },
+      "falling=true,rotation=4": {
+        "model": "dominomod:block/darkolivegreen_domino_4_dropped"
+      },
+      "falling=false,rotation=3": {
+        "model": "dominomod:block/darkolivegreen_domino_3"
+      },
+      "falling=true,rotation=3": {
+        "model": "dominomod:block/darkolivegreen_domino_3_dropped"
+      },
+      "falling=false,rotation=2": {
+        "model": "dominomod:block/darkolivegreen_domino_2"
+      },
+      "falling=true,rotation=2": {
+        "model": "dominomod:block/darkolivegreen_domino_2_dropped"
+      },
+      "falling=false,rotation=1": {
+        "model": "dominomod:block/darkolivegreen_domino_1"
+      },
+      "falling=true,rotation=1": {
+        "model": "dominomod:block/darkolivegreen_domino_1_dropped"
+      },
+      "falling=false,rotation=0": {
+        "model": "dominomod:block/darkolivegreen_domino_8",
+        "y": 180
+      },
+      "falling=true,rotation=0": {
+        "model": "dominomod:block/darkolivegreen_domino_8_dropped",
+        "y": 180
+      },
+      "falling=false,rotation=15": {
+        "model": "dominomod:block/darkolivegreen_domino_7",
+        "y": 180
+      },
+      "falling=true,rotation=15": {
+        "model": "dominomod:block/darkolivegreen_domino_7_dropped",
+        "y": 180
+      },
+      "falling=false,rotation=14": {
+        "model": "dominomod:block/darkolivegreen_domino_6",
+        "y": 180
+      },
+      "falling=true,rotation=14": {
+        "model": "dominomod:block/darkolivegreen_domino_6_dropped",
+        "y": 180
+      },
+      "falling=false,rotation=13": {
+        "model": "dominomod:block/darkolivegreen_domino_5",
+        "y": 180
+      },
+      "falling=true,rotation=13": {
+        "model": "dominomod:block/darkolivegreen_domino_5_dropped",
+        "y": 180
+      },
+      "falling=false,rotation=12": {
+        "model": "dominomod:block/darkolivegreen_domino_4",
+        "y": 180
+      },
+      "falling=true,rotation=12": {
+        "model": "dominomod:block/darkolivegreen_domino_4_dropped",
+        "y": 180
+      },
+      "falling=false,rotation=11": {
+        "model": "dominomod:block/darkolivegreen_domino_3",
+        "y": 180
+      },
+      "falling=true,rotation=11": {
+        "model": "dominomod:block/darkolivegreen_domino_3_dropped",
+        "y": 180
+      },
+      "falling=false,rotation=10": {
+        "model": "dominomod:block/darkolivegreen_domino_2",
+        "y": 180
+      },
+      "falling=true,rotation=10": {
+        "model": "dominomod:block/darkolivegreen_domino_2_dropped",
+        "y": 180
+      },
+      "falling=false,rotation=9": {
+        "model": "dominomod:block/darkolivegreen_domino_1",
+        "y": 180
+      },
+      "falling=true,rotation=9": {
+        "model": "dominomod:block/darkolivegreen_domino_1_dropped",
+        "y": 180
+      }
+    }
+  }
