@@ -21,7 +21,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
@@ -36,16 +35,16 @@ public class DominoBlock extends Block  {
 
     //北
     private static final VoxelShape SHAPE_8= Block.makeCuboidShape(2, 0, 6, 14, 24, 10);
-    private static final VoxelShape SHAPE_8_DROPPED =Block.makeCuboidShape(2, -2, -16, 14, 2, 8);
+    private static final VoxelShape SHAPE_8_DROPPED =Block.makeCuboidShape(2, 0, -16, 14, 4, 8);
 
 
     //西
     private static final VoxelShape SHAPE_4=Block.makeCuboidShape(6, 0, 2, 10, 24, 14);
-    private static final VoxelShape SHAPE_4_DROPPED=Block.makeCuboidShape(-16, -2, 2, 8, 2, 14);
+    private static final VoxelShape SHAPE_4_DROPPED=Block.makeCuboidShape(-16, 0, 2, 8, 4, 14);
     //南
-    private static final VoxelShape SHAPE_0_DROPPED=Block.makeCuboidShape(2, -2, 8, 14, 2, 32);
+    private static final VoxelShape SHAPE_0_DROPPED=Block.makeCuboidShape(2, 0, 8, 14, 4, 32);
     //東
-    private static final VoxelShape SHAPE_12_DROPPED=Block.makeCuboidShape(8, -2, 2, 32, 2, 14);
+    private static final VoxelShape SHAPE_12_DROPPED=Block.makeCuboidShape(8, 0, 2, 32, 4, 14);
     public DominoBlock() {
         super(AbstractBlock.Properties.create(Material.IRON, MaterialColor.GRAY).hardnessAndResistance(1f)
                 .sound(SoundType.STONE));
@@ -129,8 +128,7 @@ public class DominoBlock extends Block  {
 
     @Override
     public void onEntityCollision(BlockState p_196262_1_, World p_196262_2_, BlockPos p_196262_3_, Entity p_196262_4_) {
-        if(p_196262_2_.isRemote()&&!p_196262_1_.get(falling)){
-
+        if(!p_196262_2_.isRemote()&&!p_196262_1_.get(falling)){
             //倒れる方向の指定
             double X=(double)(p_196262_3_.getX())+0.5-p_196262_4_.getPosX();
             double Z=(double)(p_196262_3_.getZ())+0.5-p_196262_4_.getPosZ();
@@ -141,14 +139,16 @@ public class DominoBlock extends Block  {
             if(x*X+z*Z<0) {
                 new_k = (k + 8) % 16;
                 synchronized (p_196262_2_) {
-                    p_196262_2_.setBlockState(p_196262_3_, p_196262_1_.with(falling, true).with(ROTATION, new_k), 20);
-                    this.playSound(p_196262_2_, p_196262_3_);
+                    //クライアントに正しく状態変更を反映させるためには、setBlockStateのフラグを3）
+                    p_196262_2_.setBlockState(p_196262_3_, p_196262_1_.with(falling, true).with(ROTATION, new_k), 3);
+                    this.playSound_Drop(p_196262_2_, p_196262_3_);
                 }
             }
             else{
                 synchronized (p_196262_2_) {
-                    p_196262_2_.setBlockState(p_196262_3_, p_196262_1_.with(falling, true), 20);
-                    this.playSound(p_196262_2_, p_196262_3_);
+
+                    p_196262_2_.setBlockState(p_196262_3_, p_196262_1_.with(falling, true), 3);
+                    this.playSound_Drop(p_196262_2_, p_196262_3_);
                 }
             }
             onNeighboringCollision(new_k,p_196262_2_,p_196262_3_);
@@ -223,14 +223,15 @@ public class DominoBlock extends Block  {
                         if (x * X + z * Z < 0) {
                             new_k = (k + 8) % 16;
                             synchronized (world){
-                                world.setBlockState(pos2, next_state.with(falling, true).with(ROTATION, new_k), 20);
-                                this.playSound(world, pos2);
+                                world.setBlockState(pos2, next_state.with(falling, true).with(ROTATION, new_k), 3);
+
+                                this.playSound_Drop(world, pos2);
                             }
                         } else {
                             new_k = k;
                             synchronized (world) {
-                                world.setBlockState(pos2, next_state.with(falling, true), 20);
-                                this.playSound(world, pos2);
+                                world.setBlockState(pos2, next_state.with(falling, true), 3);
+                                this.playSound_Drop(world, pos2);
                             }
                         }
 
@@ -250,13 +251,30 @@ public class DominoBlock extends Block  {
 
 
     @Override
-    public ActionResultType onBlockActivated(BlockState p_225533_1_, World p_225533_2_, BlockPos p_225533_3_, PlayerEntity p_225533_4_, Hand p_225533_5_, BlockRayTraceResult p_225533_6_) {
+    public ActionResultType onBlockActivated(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockRayTraceResult hit) {
+        if (!world.isRemote) { // サーバーサイドでのみ実行
+            if (state.get(falling)) { // fallingがtrueの場合
+                world.setBlockState(pos, state.with(falling, false), 3); // fallingをfalseに設定
+                this.playSound_Set(world,pos);
+                return ActionResultType.SUCCESS;
+            }
+        }
         return ActionResultType.PASS;
     }
 
-    private void playSound(World p_196426_1_, BlockPos p_196426_2_) {
-        if(p_196426_1_.isRemote())p_196426_1_.playEvent(null, 1007, p_196426_2_, 0);
+
+    private void playSound_Drop(World world, BlockPos pos) {
+        if (!world.isRemote()) { // サーバー側でのみ実行
+            world.playSound(null, pos, SoundEvents.BLOCK_WOODEN_DOOR_CLOSE, SoundCategory.BLOCKS, 1.0F, 1.0F);
+        }
     }
+    private void playSound_Set(World world, BlockPos pos) {
+        if (!world.isRemote()) { // サーバー側でのみ実行
+            world.playSound(null, pos, SoundEvents.BLOCK_STONE_PLACE, SoundCategory.BLOCKS, 1.0F, 1.0F);
+        }
+    }
+
+
 
     @Override
     public boolean hasTileEntity(BlockState state) {

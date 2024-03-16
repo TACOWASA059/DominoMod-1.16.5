@@ -3,3 +3,4 @@ build/
 run-data/
 src/generated
 src/test
+.*/
